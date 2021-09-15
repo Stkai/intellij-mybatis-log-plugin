@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>me.stkai.mybatis.log</id>
+    <name>Mybatis Log Plug-in</name>
+    <vendor email="St.kai@live.cn">St.kai</vendor>
+
+    <!-- Product and plugin compatibility requirements -->
+    <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <!-- 数据库相关依赖 -->
+    <depends>com.intellij.database</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <consoleFilterProvider implementation="me.stkai.mybatis.log.service.ConsoleFilter"/>
+        <toolWindow id="MyBatis Log" anchor="bottom" secondary="true" icon="/icons/logo-bird-ninja-13x13.svg"
+                    factoryClass="me.stkai.mybatis.log.console.MybatisLogToolWindow"/>
+    </extensions>
+
+    <applicationListeners>
+    </applicationListeners>
+    <actions>
+        <action id="me.stkai.mybatis.log.action.ToolBarActions.Companion.ShowType"
+                class="me.stkai.mybatis.log.action.ToolBarActions$ShowType" text="ShowLiteralType"
+                description="Show SQL literal type"/>
+        <action id="me.stkai.mybatis.log.action.ToolBarActions.Reformat"
+                class="me.stkai.mybatis.log.action.ToolBarActions$Reformat" text="ReFormat SQL"
+                description="ReFormat SQL"/>
+    </actions>
+</idea-plugin>
