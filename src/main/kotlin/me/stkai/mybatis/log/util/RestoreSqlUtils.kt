@@ -68,21 +68,30 @@ object RestoreSqlUtils {
         // 将sql中的 '?' 替换对应为参数 并添加字面量类型
         var resultSql = ""
         // 当前 '?' 所在索引
-        var i = -1
+        var questionMarkIndex = -1
+        // ' 数量
+        var apostropheCount = 0
         preparingSql.forEach { c: Char ->
+            if (c == '\'') {
+                apostropheCount += 1
+                return@forEach
+            }
+            if (apostropheCount % 2 != 0) {
+                return@forEach
+            }
             if (c == '?') {
-                i += 1
-                if (EnumUtils.isValidEnumIgnoreCase(JavaType::class.java, typeArray[i])) {
-                    val type = EnumUtils.getEnum(JavaType::class.java, typeArray[i])
+                questionMarkIndex += 1
+                if (EnumUtils.isValidEnumIgnoreCase(JavaType::class.java, typeArray[questionMarkIndex])) {
+                    val type = EnumUtils.getEnum(JavaType::class.java, typeArray[questionMarkIndex])
                     if (ToolBarActions.isShowType && type.isShowType()) {
                         // 显示字面量类型 type 'params'
-                        resultSql += "${type.getType()} '${paramsArray[i]}'"
+                        resultSql += "${type.getType()} '${paramsArray[questionMarkIndex]}'"
                         return@forEach
                     }
-                    resultSql += "'${paramsArray[i]}'"
+                    resultSql += "'${paramsArray[questionMarkIndex]}'"
                     return@forEach
                 }
-                resultSql += paramsArray[i]
+                resultSql += paramsArray[questionMarkIndex]
                 return@forEach
             } else {
                 resultSql += c
