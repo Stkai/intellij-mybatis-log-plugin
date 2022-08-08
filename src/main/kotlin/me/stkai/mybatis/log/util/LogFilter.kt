@@ -19,6 +19,7 @@ package me.stkai.mybatis.log.util
 import com.intellij.execution.filters.Filter
 import com.intellij.openapi.project.Project
 import me.stkai.mybatis.log.action.ToolBarActions
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory
  * @since 2021-09-07 20:12
  */
 class LogFilter(private val project: Project) : Filter {
-    val log: org.slf4j.Logger = LoggerFactory.getLogger(this.javaClass)
+    val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
     companion object {
         /**
@@ -59,22 +60,23 @@ class LogFilter(private val project: Project) : Filter {
                 }
                 // 标题
                 PrintUtils.system(preparing.substring(0, preparing.indexOf(RestoreSqlUtils.PREPARING_STR)).trim())
-                if (restoredSql.toLowerCase().startsWith("insert")) {
+                if (restoredSql.lowercase().startsWith("insert")) {
                     PrintUtils.error(restoredSql)
                 }
-                if (restoredSql.toLowerCase().startsWith("delete")) {
+                if (restoredSql.lowercase().startsWith("delete")) {
                     PrintUtils.error(restoredSql)
                 }
                 if (restoredSql.startsWith("update")) {
                     PrintUtils.warn(restoredSql)
                 }
-                if (restoredSql.toLowerCase().startsWith("select")) {
+                if (restoredSql.lowercase().startsWith("select")) {
                     PrintUtils.normal(restoredSql)
                 }
                 PrintUtils.normal("")
             } catch (e: Exception) {
+                log.error("${RestoreSqlUtils.PREPARING_STR}{}", preparing)
+                log.error("${RestoreSqlUtils.PARAMETERS_STR}{}", parameters)
                 log.error("还原SQL失败", e)
-                PrintUtils.error(e.toString())
             }
         }
         return null

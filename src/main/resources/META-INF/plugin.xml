@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>me.stkai.mybatis.log</id>
-    <name>Mybatis Log Plug-in</name>
+    <name>Mybatis Log</name>
     <vendor email="St.kai@live.cn">St.kai</vendor>
 
     <!-- Product and plugin compatibility requirements -->
